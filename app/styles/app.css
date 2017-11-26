@@ -1,0 +1,27 @@
+.container {
+  width: 1400px;
+  margin: 0 auto;
+}
+
+.ember-light-table {
+  color: rgb(40, 163, 194);
+}
+
+.ember-light-table .lt-row {
+  height: 30px;
+}
+
+.ember-light-table .lt-column {
+  padding: 5px 10px;
+}
+
+.ember-light-table .lt-row td {
+  border-color: #DADADA;
+  border-width: 0 0 1px;
+  border-style: solid;
+  padding: 0 10px;
+}
+
+.ember-light-table .lt-row:nth-child(even) {
+  background-color: rgb(248, 244, 244);
+}
