@@ -1,0 +1,30 @@
+@import "normalize";
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  width: 1400px;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+.table-footer {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.table-info {
+  color: #777;
+  font-size: 14px;
+}
+
+.entities-amount-picker {
+  margin-bottom: 12px;
+}
+
+@import "report-table";
+@import "simple-pagination";

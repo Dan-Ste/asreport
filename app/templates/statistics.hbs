@@ -1,0 +1,33 @@
+<div class="container">
+  {{log totalStatistics}}
+  <div class="entities-amount-picker">
+    Show&nbsp;
+    {{simple-select
+      options=AVAILABLE_ENTITIES_PER_PAGE
+      choice=entitiesOnPage
+      onchange=(action changeEntitiesOnPage)
+    }}
+    &nbsp;entities
+  </div>
+
+  {{report-table
+      data=showedEntities
+      columns=columns
+  }}
+
+  <div class="table-footer">
+    <div class="table-info">
+      Showing {{inc offset}} to {{limit}} of {{statistics.length}}
+    </div>
+
+    <div>
+      Go to page#:&nbsp;{{input value=page onchange=(action setPage value='target.value')}}
+    </div>
+
+    {{simple-pagination
+        page=page
+        totalPages=totalPages
+        onPageChange=(action setPage)
+    }}
+  </div>
+</div>

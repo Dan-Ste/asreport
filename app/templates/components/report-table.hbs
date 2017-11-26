@@ -1,1 +1,37 @@
-{{yield}}
+{{#light-table table height='65vh' as |t|}}
+
+  {{t.head
+    iconSortable='fa fa-sort'
+    iconAscending='fa fa-sort-asc'
+    iconDescending='fa fa-sort-desc'
+    fixed=true
+  }}
+
+  {{#t.body
+    canSelect=false
+    as |body|
+  }}
+    {{#if isLoading}}
+      {{#body.loader}}
+        ...Loading
+      {{/body.loader}}
+    {{/if}}
+  {{/t.body}}
+
+  {{#t.foot fixed=true as |columns|}}
+    <tr class="total-on-page-row">
+      {{#each columns as |column|}}
+        <td class="lt-column" width={{column.width}}>
+          {{column.totalOnPage}}
+        </td>
+      {{/each}}
+    </tr>
+    <tr class="total-row">
+      {{#each columns as |column|}}
+        <td class="lt-column" width={{column.width}}>
+          {{column.total}}
+        </td>
+      {{/each}}
+    </tr>
+  {{/t.foot}}
+{{/light-table}}

@@ -1,0 +1,23 @@
+<li class="{{if (eq page 1) 'disabled'}} simple-pagination__previous">
+  <a {{action onPageChange (dec page)}} href="#" aria-label="Previous">
+    <span>Previous</span>
+  </a>
+</li>
+
+{{#each rangeWithDots as |p|}}
+  {{#if (eq p '...')}}
+    <li class="simple-pagination__dots">
+      <span>{{p}}</span>
+    </li>
+  {{else}}
+    <li class="{{if (eq p page) 'active'}} simple-pagination__page">
+      <a {{action onPageChange p}} href="#">{{p}}</a>
+    </li>
+  {{/if}}
+{{/each}}
+
+<li class="{{if (eq page totalPages) 'disabled'}} simple-pagination__next">
+  <a {{action onPageChange (inc page)}} href="#" aria-label="Next">
+    <span>Next</span>
+  </a>
+</li>

@@ -1,0 +1,36 @@
+.ember-light-table {
+  color: rgb(40, 163, 194);
+
+  & .lt-row {
+    height: 30px;
+  }
+
+  & .lt-column {
+    padding: 5px 10px;
+  }
+
+  & .lt-row td {
+    border-color: #DADADA;
+    border-width: 0 0 1px;
+    border-style: solid;
+    padding: 0 10px;
+  }
+
+  & .lt-row:nth-child(even) {
+    background-color: rgb(248, 244, 244);
+  }
+
+  & .total-row {
+    background-color: rgb(230, 244, 255);
+  }
+
+  & .total-on-page-row {
+    background-color: rgb(230, 244, 255);
+
+    td {
+      border-color: rgb(16, 44, 68);
+      border-width: 1px 0 1px;
+      border-style: solid;
+    }
+  }
+}
