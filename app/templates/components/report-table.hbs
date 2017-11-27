@@ -1,3 +1,13 @@
+<div class="report-table__amount-picker">
+  Show&nbsp;
+  {{simple-select
+      options=AVAILABLE_ENTITIES_PER_PAGE
+      choice=entitiesOnPage
+      onchange=(action changeEntitiesOnPage)
+  }}
+  &nbsp;entities
+</div>
+
 {{#light-table table height='387px' as |t|}}
 
   {{t.head
@@ -20,19 +30,35 @@
   {{/t.body}}
 
   {{#t.foot fixed=true as |columns|}}
-    <tr class="total-on-page-row">
+    <tr class="summary-on-page-row">
       {{#each columns as |column|}}
         <td class="lt-column" width={{column.width}}>
-          {{column.totalOnPage}}
+          {{column.summaryOnPage}}
         </td>
       {{/each}}
     </tr>
-    <tr class="total-row">
+    <tr class="summary-row">
       {{#each columns as |column|}}
         <td class="lt-column" width={{column.width}}>
-          {{column.total}}
+          {{column.summary}}
         </td>
       {{/each}}
     </tr>
   {{/t.foot}}
 {{/light-table}}
+
+<div class="report-table__footer">
+  <div class="report-table__info">
+    Showing {{inc offset}} to {{limit}} of {{data.length}}
+  </div>
+
+  <div>
+    Go to page#:&nbsp;{{input value=page onchange=(action setPage value='target.value')}}
+  </div>
+
+  {{simple-pagination
+      page=page
+      totalPages=totalPages
+      onPageChange=(action setPage)
+  }}
+</div>

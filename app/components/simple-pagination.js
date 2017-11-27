@@ -5,7 +5,7 @@ import {
 } from '@ember/object';
 
 
-function buildPagination(currentPage, totalPages, delta = 2) {
+function buildPagination(currentPage, totalPages, delta = 4) {
   let range = [];
   let rangeWithDots = [];
   let l;
