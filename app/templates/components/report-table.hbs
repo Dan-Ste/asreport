@@ -1,6 +1,7 @@
-{{#light-table table height='65vh' as |t|}}
+{{#light-table table height='387px' as |t|}}
 
   {{t.head
+    onColumnClick=(action onColumnClick)
     iconSortable='fa fa-sort'
     iconAscending='fa fa-sort-asc'
     iconDescending='fa fa-sort-desc'

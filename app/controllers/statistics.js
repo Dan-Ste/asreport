@@ -5,6 +5,7 @@ import {
 import {
   get,
   set,
+  setProperties,
   computed
 } from '@ember/object';
 
@@ -40,6 +41,16 @@ export default Controller.extend({
 
   AVAILABLE_ENTITIES_PER_PAGE,
 
+  dir: 'asc',
+  sort: 'time',
+
+  sortedStatistics: computed.sort('statistics', 'sortBy').readOnly(),
+  sortBy: computed('dir', 'sort', {
+    get() {
+      return [`${get(this, 'sort')}:${get(this, 'dir')}`];
+    }
+  }).readOnly(),
+
   totalPages: computed('statistics', 'entitiesOnPage', {
     get() {
       const totalEntities = get(this, 'totalEntities');
@@ -61,25 +72,25 @@ export default Controller.extend({
     }
   }),
 
-  showedEntities: computed('statistics.[]', 'offset', 'limit', {
+  showedEntities: computed('sortedStatistics.[]', 'offset', 'limit', {
     get() {
-      const statistics = get(this, 'statistics');
+      const sortedStatistics = get(this, 'sortedStatistics');
       const offset = get(this, 'offset');
       const limit = get(this, 'limit');
 
-      return statistics.slice(offset, limit);
+      return sortedStatistics.slice(offset, limit);
     }
   }),
 
   summaryStats: computed('statistics.[]', {
     get() {
-      return accumulateStatisticsTotal(get(this,'statistics'), 'TOTAL');
+      return accumulateStatisticsTotal(get(this, 'statistics'), 'TOTAL');
     }
   }),
 
   summaryOnPageStats: computed('showedEntities.[]', {
     get() {
-      return accumulateStatisticsTotal(get(this,'showedEntities'), 'TOTAL');
+      return accumulateStatisticsTotal(get(this, 'showedEntities'), 'TOTAL');
     }
   }),
 
@@ -91,90 +102,90 @@ export default Controller.extend({
       const entitiesOnPage = get(this, 'entitiesOnPage');
       const summaryOnPageStats = get(this, 'summaryOnPageStats');
 
-        return [{
-          label: 'Date',
-          valuePath: 'time',
-          width: '150px',
-          total: 'TOTAL',
-          totalOnPage: 'TOTAL ON PAGE'
-        }, {
-          label: 'Searches',
-          valuePath: 'searches',
-          width: '110px',
-          total: summaryStats.searches,
-          totalOnPage: summaryOnPageStats.searches,
-        }, {
-          label: 'Clicks',
-          valuePath: 'clicks',
-          width: '80px',
-          total: summaryStats.clicks,
-          totalOnPage: summaryOnPageStats.clicks,
-        }, {
-          label: 'Unq. clicks',
-          valuePath: 'unique_clicks',
-          width: '120px',
-          total: summaryStats.unique_clicks,
-          totalOnPage: summaryOnPageStats.unique_clicks,
-        }, {
-          label: 'CTR',
-          valuePath: 'ctr',
-          width: '80px',
-          total: (summaryStats.ctr / totalEntities).toFixed(2),
-          totalOnPage: (summaryOnPageStats.ctr / entitiesOnPage).toFixed(2),
-        }, {
-          label: 'Booking',
-          valuePath: 'bookings',
-          width: '100px',
-          total: summaryStats.bookings,
-          totalOnPage: summaryOnPageStats.bookings
-        }, {
-          label: 'Sales',
-          valuePath: 'sales',
-          width: '80px',
-          total: Math.floor((summaryStats.sales / totalEntities)),
-          totalOnPage: Math.floor((summaryOnPageStats.sales / entitiesOnPage))
-        }, {
-          label: 'BTR',
-          valuePath: 'btr',
-          width: '70px',
-          total: (summaryStats.btr / totalEntities).toFixed(2),
-          totalOnPage: (summaryOnPageStats.btr / entitiesOnPage).toFixed(2),
-        }, {
-          label: 'STR',
-          valuePath: 'str',
-          width: '70px',
-          total: (summaryStats.str / totalEntities).toFixed(2),
-          totalOnPage: (summaryOnPageStats.str / entitiesOnPage).toFixed(2),
-        }, {
-          label: 'Success %',
-          valuePath: 'success',
-          width: '120px',
-          total: (summaryStats.success / totalEntities).toFixed(2),
-          totalOnPage: (summaryOnPageStats.success / entitiesOnPage).toFixed(2)
-        }, {
-          label: 'Errors %',
-          valuePath: 'errors',
-          width: '100px',
-          total: (summaryStats.errors / totalEntities).toFixed(2),
-          totalOnPage: (summaryOnPageStats.errors / entitiesOnPage).toFixed(2)
-        }, {
-          label: 'Zeros %',
-          valuePath: 'zeros',
-          width: '100px',
-          total: (summaryStats.zeros / totalEntities).toFixed(2),
-          totalOnPage: (summaryStats.zeros / entitiesOnPage).toFixed(2)
-        }, {
-          label: 'T/O %',
-          valuePath: 'timeouts',
-          width: '80px',
-          total: (summaryStats.timeouts / totalEntities).toFixed(2),
-          totalOnPage: (summaryOnPageStats.timeouts / entitiesOnPage).toFixed(2)
-        }, {
-          label: 'Avg Resp',
-          valuePath: 'duration',
-          total: (summaryStats.duration / totalEntities).toFixed(2),
-          totalOnPage: (summaryOnPageStats.duration / entitiesOnPage).toFixed(2)
-        }]
+      return [{
+        label: 'Date',
+        valuePath: 'time',
+        width: '150px',
+        total: 'TOTAL',
+        totalOnPage: 'TOTAL ON PAGE'
+      }, {
+        label: 'Searches',
+        valuePath: 'searches',
+        width: '110px',
+        total: summaryStats.searches,
+        totalOnPage: summaryOnPageStats.searches,
+      }, {
+        label: 'Clicks',
+        valuePath: 'clicks',
+        width: '80px',
+        total: summaryStats.clicks,
+        totalOnPage: summaryOnPageStats.clicks,
+      }, {
+        label: 'Unq. clicks',
+        valuePath: 'unique_clicks',
+        width: '120px',
+        total: summaryStats.unique_clicks,
+        totalOnPage: summaryOnPageStats.unique_clicks,
+      }, {
+        label: 'CTR',
+        valuePath: 'ctr',
+        width: '80px',
+        total: (summaryStats.ctr / totalEntities).toFixed(2),
+        totalOnPage: (summaryOnPageStats.ctr / entitiesOnPage).toFixed(2),
+      }, {
+        label: 'Booking',
+        valuePath: 'bookings',
+        width: '100px',
+        total: summaryStats.bookings,
+        totalOnPage: summaryOnPageStats.bookings
+      }, {
+        label: 'Sales',
+        valuePath: 'sales',
+        width: '80px',
+        total: Math.floor((summaryStats.sales / totalEntities)),
+        totalOnPage: Math.floor((summaryOnPageStats.sales / entitiesOnPage))
+      }, {
+        label: 'BTR',
+        valuePath: 'btr',
+        width: '70px',
+        total: (summaryStats.btr / totalEntities).toFixed(2),
+        totalOnPage: (summaryOnPageStats.btr / entitiesOnPage).toFixed(2),
+      }, {
+        label: 'STR',
+        valuePath: 'str',
+        width: '70px',
+        total: (summaryStats.str / totalEntities).toFixed(2),
+        totalOnPage: (summaryOnPageStats.str / entitiesOnPage).toFixed(2),
+      }, {
+        label: 'Success %',
+        valuePath: 'success',
+        width: '120px',
+        total: (summaryStats.success / totalEntities).toFixed(2),
+        totalOnPage: (summaryOnPageStats.success / entitiesOnPage).toFixed(2)
+      }, {
+        label: 'Errors %',
+        valuePath: 'errors',
+        width: '100px',
+        total: (summaryStats.errors / totalEntities).toFixed(2),
+        totalOnPage: (summaryOnPageStats.errors / entitiesOnPage).toFixed(2)
+      }, {
+        label: 'Zeros %',
+        valuePath: 'zeros',
+        width: '100px',
+        total: (summaryStats.zeros / totalEntities).toFixed(2),
+        totalOnPage: (summaryStats.zeros / entitiesOnPage).toFixed(2)
+      }, {
+        label: 'T/O %',
+        valuePath: 'timeouts',
+        width: '80px',
+        total: (summaryStats.timeouts / totalEntities).toFixed(2),
+        totalOnPage: (summaryOnPageStats.timeouts / entitiesOnPage).toFixed(2)
+      }, {
+        label: 'Avg Resp',
+        valuePath: 'duration',
+        total: (summaryStats.duration / totalEntities).toFixed(2),
+        totalOnPage: (summaryOnPageStats.duration / entitiesOnPage).toFixed(2)
+      }]
     }
   }),
 
@@ -192,5 +203,14 @@ export default Controller.extend({
   changeEntitiesOnPage(entitiesOnPage) {
     set(this, 'entitiesOnPage', entitiesOnPage);
     set(this, 'page', 1);
+  },
+
+  sortColumn(column) {
+    if (column.sorted) {
+      setProperties(this, {
+        dir: column.ascending ? 'asc' : 'desc',
+        sort: column.get('valuePath')
+      });
+    }
   }
 });

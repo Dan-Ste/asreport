@@ -1,5 +1,5 @@
 <div class="container">
-  {{log totalStatistics}}
+
   <div class="entities-amount-picker">
     Show&nbsp;
     {{simple-select
@@ -13,6 +13,9 @@
   {{report-table
       data=showedEntities
       columns=columns
+      sort=sort
+      dir=dir
+      onColumnClick=(action sortColumn)
   }}
 
   <div class="table-footer">
