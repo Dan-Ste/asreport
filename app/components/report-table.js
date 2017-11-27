@@ -13,9 +13,9 @@ const AVAILABLE_ENTITIES_PER_PAGE = [10, 20, 30, 40, 50];
 export default Component.extend({
   classNames: ['report-table'],
 
-  //passed in
+  // passed in
   data: null,
-  meta: null,
+  settings: null,
   totalEntities: null,
 
   entitiesOnPage: 10,
@@ -51,7 +51,7 @@ export default Component.extend({
 
   columns: computed('showedEntities.[]', 'entitiesOnPage', 'summaryOnPage', {
     get() {
-      const meta = get(this, 'meta');
+      const settings = get(this, 'settings');
 
       const totalEntities = get(this, 'totalEntities');
       const summary = get(this, 'summary');
@@ -59,7 +59,7 @@ export default Component.extend({
       const entitiesOnPage = get(this, 'entitiesOnPage');
       const summaryOnPage = get(this, 'summaryOnPage');
 
-      return meta.map(({
+      return settings.map(({
         label,
         valuePath,
         columnWidth,
@@ -107,7 +107,7 @@ export default Component.extend({
     }
   }),
 
-  valuePaths: computed.map('meta', metaObj => metaObj.valuePath),
+  valuePaths: computed.map('settings', settingsObj => settingsObj.valuePath),
 
   showedEntities: computed('sortedData.[]', 'offset', 'limit', {
     get() {

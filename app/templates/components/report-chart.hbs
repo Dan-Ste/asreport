@@ -1,5 +1,14 @@
+  Show&nbsp;
+  {{simple-select
+      options=labels
+      choice=currentLabel
+      onchange=(action (mut currentLabel))
+  }}
+  &nbsp;data
+
 {{ember-chart
     type='line'
     data=chartData
     options=chartOptions
+    animate=true
 }}

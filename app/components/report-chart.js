@@ -1,34 +1,59 @@
 import Component from '@ember/component';
 import {
+  set,
   get,
   computed
 } from '@ember/object';
 import moment from 'moment';
+import { debug } from '@ember/debug';
 
 export default Component.extend({
-  data: null,
-  valuePath: null,
+  classNames: ['report-chart'],
 
-  dataset: computed('data.[]', 'valuePath', {
+  // passed in
+  data: null,
+  settings: null,
+
+  currentLabel: null,
+
+  init() {
+    this._super(...arguments);
+
+    // Set initial currentLabel
+    set(this, 'currentLabel', get(this, 'settings')[1].label);
+  },
+
+  labels: computed.map('settings', settingsObj => settingsObj.label),
+
+  valuePath: computed('currentLabel', 'settings', {
+    get() {
+      const settings = get(this, 'settings');
+      const currentLabel = get(this, 'currentLabel');
+
+      return settings.findBy('label', currentLabel).valuePath;
+    }
+  }),
+
+  dataByTime: computed('data.[]', 'valuePath', {
     get() {
       const data = get(this, 'data');
       const valuePath = get(this, 'valuePath');
 
-      return data.map(d => {
+      return data.map(record => {
         return {
-          t: moment(d.time),
-          y: d[valuePath]
+          t: moment(record.time),
+          y: Number(record[valuePath])
         }
       });
     }
   }),
 
-  chartData: computed('dataset.[]', {
+  chartData: computed('dataByTime.[]', {
     get() {
       return {
         datasets: [{
           label: get(this, 'valuePath'),
-          data: get(this, 'dataset'),
+          data: get(this, 'dataByTime'),
           borderColor: "rgb(54, 162, 235)",
           backgroundColor: "rgb(54, 162, 235)",
           pointHoverRadius: 5,
@@ -50,7 +75,7 @@ export default Component.extend({
           major: {
             fontStyle: 'bold'
           },
-          callback: function (value, index, values) {
+          callback(value, index, values) {
             if (value === '12AM') {
               return moment(values[index].value).format('DD MMM');
             } else {
@@ -65,7 +90,7 @@ export default Component.extend({
       mode: 'index',
       intersect: false,
       callbacks: {
-        title: function (tooltipItem) {
+        title(tooltipItem) {
           return tooltipItem[0].xLabel.format('lll');
         }
       }

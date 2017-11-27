@@ -1,6 +1,12 @@
-export default function accumulateDataTotal(statistics, valuePaths) {
+/**
+ * Accumulate all data values by provided valuePaths
+ * @param {Array} statistics
+ * @param {Array} valuePaths
+ * @returns {Object} Object with accumulated values
+ */
 
-  return statistics.reduce((acc, curValue) => {
+export default function accumulateDataTotal(data, valuePaths) {
+  return data.reduce((acc, curValue) => {
     const accData = {};
 
     valuePaths.forEach(valuePath => {

@@ -2,23 +2,14 @@
 
   <h1>Statistics</h1>
 
-  Show&nbsp;
-  {{!-- {{simple-select
-      options=AVAILABLE_ENTITIES_PER_PAGE
-      choice=entitiesOnPage
-      onchange=(action changeEntitiesOnPage)
-  }} --}}
-  &nbsp;data
-
   {{report-chart
       data=statistics
-      valuePath="searches"
-      class="report-chart"
+      settings=STATISTICS_REPORT_SETTINGS
   }}
 
   {{report-table
       data=statistics
       totalEntities=totalEntities
-      meta=META
+      settings=STATISTICS_REPORT_SETTINGS
   }}
 </div>

@@ -3,12 +3,12 @@ import {
   readOnly
 } from '@ember/object/computed';
 import {
-  META
+  STATISTICS_REPORT_SETTINGS
 } from '../utils/statistics-report';
 
 export default Controller.extend({
   statistics: readOnly('model.statistics'),
   totalEntities: readOnly('model.totalEntities'),
 
-  META
+  STATISTICS_REPORT_SETTINGS
 });

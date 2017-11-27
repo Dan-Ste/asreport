@@ -1,4 +1,8 @@
-export const META = [
+/**
+ * All settings for statistics report
+ */
+
+export const STATISTICS_REPORT_SETTINGS = [
   {
     label: 'Date',
     valuePath: 'time',
