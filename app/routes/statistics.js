@@ -7,14 +7,30 @@ import {
 } from '@ember/object';
 
 export default Route.extend({
+  queryParams: {
+    dateFrom: {
+      refreshModel: true
+    },
+    dateTo: {
+      refreshModel: true
+    },
+    interval: {
+      refreshModel: true
+    }
+  },
+
   ajax: service(),
 
-  model() {
+  model({
+    dateFrom,
+    dateTo,
+    interval
+  }) {
     return get(this, 'ajax').request('/statistics', {
       data: {
-        from: '2017-10-27',
-        to: '2017-11-02',
-        interval: '1h'
+        from: dateFrom,
+        to: dateTo,
+        interval
       }
     }).then(response => {
       return {

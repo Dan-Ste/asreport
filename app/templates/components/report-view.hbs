@@ -1,1 +1,12 @@
-{{yield}}
+<h1>{{title}}</h1>
+
+{{report-chart
+    data=data
+    settings=settings
+}}
+
+{{report-table
+    data=data
+    totalEntities=totalEntities
+    settings=settings
+}}

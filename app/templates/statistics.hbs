@@ -1,13 +1,6 @@
 <div class="container">
-
-  <h1>Statistics</h1>
-
-  {{report-chart
-      data=statistics
-      settings=STATISTICS_REPORT_SETTINGS
-  }}
-
-  {{report-table
+  {{report-view
+      title=title
       data=statistics
       totalEntities=totalEntities
       settings=STATISTICS_REPORT_SETTINGS

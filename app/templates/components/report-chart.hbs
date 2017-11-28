@@ -1,8 +1,8 @@
   Show&nbsp;
   {{simple-select
       options=labels
-      choice=currentLabel
-      onchange=(action (mut currentLabel))
+      choice=label
+      onchange=(action updateChart)
   }}
   &nbsp;data
 

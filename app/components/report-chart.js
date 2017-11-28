@@ -1,11 +1,11 @@
 import Component from '@ember/component';
 import {
   set,
+  setProperties,
   get,
   computed
 } from '@ember/object';
 import moment from 'moment';
-import { debug } from '@ember/debug';
 
 export default Component.extend({
   classNames: ['report-chart'],
@@ -14,48 +14,46 @@ export default Component.extend({
   data: null,
   settings: null,
 
-  currentLabel: null,
+  label: null,
+  valuePath: null,
+  color: null,
 
   init() {
     this._super(...arguments);
 
-    // Set initial currentLabel
-    set(this, 'currentLabel', get(this, 'settings')[1].label);
+    const {
+      label,
+      valuePath,
+      color
+    } = get(this, 'settings')[1]
+
+    // Set initials
+    setProperties(this, {
+      label,
+      valuePath,
+      color
+    });
   },
 
-  labels: computed.map('settings', settingsObj => settingsObj.label),
+  availableRecords: computed.filter('settings', settingsObj => !settingsObj.withoutChart),
+  labels: computed.map('availableRecords', settingsObj => settingsObj.label),
+  chartDates: computed.map('data', record => moment(record.time)),
 
-  valuePath: computed('currentLabel', 'settings', {
-    get() {
-      const settings = get(this, 'settings');
-      const currentLabel = get(this, 'currentLabel');
-
-      return settings.findBy('label', currentLabel).valuePath;
-    }
-  }),
-
-  dataByTime: computed('data.[]', 'valuePath', {
+  chartData: computed('data.[]', 'valuePath', {
     get() {
       const data = get(this, 'data');
       const valuePath = get(this, 'valuePath');
+      const label = get(this, 'label');
+      const color = get(this, 'color');
+      const chartDates = get(this, 'chartDates');
 
-      return data.map(record => {
-        return {
-          t: moment(record.time),
-          y: Number(record[valuePath])
-        }
-      });
-    }
-  }),
-
-  chartData: computed('dataByTime.[]', {
-    get() {
       return {
+        labels: chartDates,
         datasets: [{
-          label: get(this, 'valuePath'),
-          data: get(this, 'dataByTime'),
-          borderColor: "rgb(54, 162, 235)",
-          backgroundColor: "rgb(54, 162, 235)",
+          label,
+          data: data.map(record => Number(record[valuePath])),
+          borderColor: color,
+          backgroundColor: color,
           pointHoverRadius: 5,
           fill: false,
           lineTension: 0
@@ -69,7 +67,8 @@ export default Component.extend({
       xAxes: [{
         type: 'time',
         time: {
-          unit: 'hour'
+          unit: 'hour',
+          stepSize: 6
         },
         ticks: {
           major: {
@@ -95,5 +94,20 @@ export default Component.extend({
         }
       }
     }
+  },
+
+  updateChart(label) {
+    const availableRecords = get(this, 'availableRecords');
+    const {
+      valuePath,
+      color
+    } = availableRecords.findBy('label', label);
+
+    // Set initials
+    setProperties(this, {
+      label,
+      valuePath,
+      color
+    });
   }
 });
