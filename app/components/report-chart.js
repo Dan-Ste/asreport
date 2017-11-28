@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import {
-  set,
   setProperties,
   get,
   computed
