@@ -6,6 +6,10 @@
   display: flex;
   align-items: center;
 
+  li {
+    cursor: pointer;
+  }
+
   a {
     text-decoration: none;
     color: rgb(27, 177, 139);
@@ -15,7 +19,7 @@
     display: block;
     font-size: 14px;
 
-    &.disabled a {
+    & a[disabled] {
       color: #777;
       cursor: not-allowed;
     }

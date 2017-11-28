@@ -3,6 +3,15 @@
   .ember-light-table {
     color: rgb(40, 163, 194);
 
+    // This disable scrolling
+    height: auto !important;
+    .tse-scrollable.vertical .tse-scroll-content {
+      width: auto !important;
+      height: auto !important;
+      overflow: auto;
+      position: relative;
+    }
+
     & .lt-row {
       height: 30px;
     }
@@ -51,5 +60,14 @@
   &__info {
     color: #777;
     font-size: 14px;
+  }
+
+  &__page-input {
+    color: #777;
+    font-size: 14px;
+
+    input {
+      width: 50px;
+    }
   }
 }

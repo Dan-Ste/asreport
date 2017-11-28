@@ -18,16 +18,7 @@
     fixed=true
   }}
 
-  {{#t.body
-    canSelect=false
-    as |body|
-  }}
-    {{#if isLoading}}
-      {{#body.loader}}
-        ...Loading
-      {{/body.loader}}
-    {{/if}}
-  {{/t.body}}
+  {{t.body canSelect=false}}
 
   {{#t.foot fixed=true as |columns|}}
     <tr class="summary-on-page-row">
@@ -52,8 +43,8 @@
     Showing {{inc offset}} to {{limit}} of {{data.length}}
   </div>
 
-  <div>
-    Go to page#:&nbsp;{{input value=page onchange=(action setPage value='target.value')}}
+  <div class="report-table__page-input">
+    Go to page#:&nbsp;{{input keyUp=(action goToPage)}}
   </div>
 
   {{simple-pagination

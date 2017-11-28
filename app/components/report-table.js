@@ -5,6 +5,9 @@ import {
   get,
   computed
 } from '@ember/object';
+import {
+  typeOf
+} from '@ember/utils';
 import Table from 'ember-light-table';
 import accumulateDataTotal from '../utils/accumulate-data-total';
 
@@ -131,11 +134,24 @@ export default Component.extend({
     }
   }),
 
+  goToPage(e) {
+    if (e.key === 'Enter') {
+      const page = Number(e.target.value);
+
+      this.setPage(page);
+    }
+  },
+
   setPage(page) {
     let totalPages = get(this, 'totalPages');
     let currPage = get(this, 'page');
 
-    if (page < 1 || page > totalPages || page === currPage) {
+    if(page === currPage) {
+      return;
+    }
+
+    if (isNaN(page) || typeOf(page) !== 'number' || page < 1 || page > totalPages) {
+      alert('Invalid page input')
       return;
     }
 
